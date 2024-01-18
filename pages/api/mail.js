@@ -9,12 +9,10 @@ export const config = {
    },
 };
 
-const corsMiddleware = cors({
-   origin: '*', // Set this to your specific origin or list of allowed origins
-});
+
 
 export default async function handler(req, res) {
-   await corsMiddleware(req, res);
+
    if (req.method === "POST") {
       const form = new IncomingForm();
 
