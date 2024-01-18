@@ -15,6 +15,7 @@ const corsMiddleware = cors({
 });
 
 export default async function handler(req, res) {
+   await corsMiddleware(req, res);
    if (req.method === "POST") {
       const form = new IncomingForm();
 
