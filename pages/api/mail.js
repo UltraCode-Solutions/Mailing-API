@@ -78,7 +78,7 @@ export default async function handler(req, res) {
                const mailOptions = {
                   from: process.env.MAIL_SENDER,
                   to: process.env.MAIL_TARGET,
-                  subject: subject,
+                  subject: newMail.subject,
                   html: `
                      <h1 style="color: #000000;">New Message from <span style="color: #3366cc;">${newMail.sender}</span></h1>
                      <p style="color: #000000;">${newMail.message}</p>
@@ -113,7 +113,7 @@ export default async function handler(req, res) {
             const mailOptions = {
                from: process.env.MAIL_SENDER,
                to: process.env.MAIL_TARGET,
-               subject: subject,
+               subject: newMail.subject,
                html: `
                   <h1 style="color: #000000;">New Message from <span style="color: #3366cc;">${newMail.sender}</span></h1>
                   <p style="color: #000000;">${newMail.message}</p>
