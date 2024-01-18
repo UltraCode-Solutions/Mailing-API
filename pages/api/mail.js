@@ -1,12 +1,18 @@
 import nodemailer from "nodemailer";
 import { IncomingForm } from "formidable";
 import fs from "fs/promises";
+import cors from 'cors';
 
 export const config = {
    api: {
       bodyParser: false,
    },
 };
+
+const corsMiddleware = cors({
+   origin: '*', // Set this to your specific origin or list of allowed origins
+   methods: 'POST',
+});
 
 export default async function handler(req, res) {
    if (req.method === "POST") {
