@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 import { IncomingForm } from "formidable";
 import fs from "fs/promises";
-import cors from 'cors';
+import cors from "cors";
 
 export const config = {
    api: {
@@ -9,10 +9,7 @@ export const config = {
    },
 };
 
-
-
 export default async function handler(req, res) {
-
    if (req.method === "POST") {
       const form = new IncomingForm();
 
@@ -66,13 +63,16 @@ export default async function handler(req, res) {
             // Ensure the file path is valid
             if (file[0].filepath) {
                const fileContent = await fs.readFile(file[0].filepath);
-               let mimetype = file[0].mimetype
-               if (mimetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                  mimetype = "docx"
-               }else if(mimetype == "application/pdf"){
-                  mimetype = "pdf"
-               }else if(mimetype == "application/msword"){
-                  mimetype = "doc"
+               let mimetype = file[0].mimetype;
+               if (
+                  mimetype ==
+                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+               ) {
+                  mimetype = "docx";
+               } else if (mimetype == "application/pdf") {
+                  mimetype = "pdf";
+               } else if (mimetype == "application/msword") {
+                  mimetype = "doc";
                }
 
                const mailOptions = {
@@ -110,7 +110,31 @@ export default async function handler(req, res) {
                return res.status(500).json({ error: "Invalid file path" });
             }
          } else {
-            return res.status(500).json({ error: "No file provided" });
+            const mailOptions = {
+               from: process.env.MAIL_SENDER,
+               to: process.env.MAIL_TARGET,
+               subject: subject,
+               html: `
+                  <h1 style="color: #000000;">New Message from <span style="color: #3366cc;">${newMail.sender}</span></h1>
+                  <p style="color: #000000;">${newMail.message}</p>
+                  <ul>
+                     <li style="color: #000000;">Name: ${newMail.name}</li>
+                     <li style="color: #000000;">Last Name: ${newMail.lastName}</li>
+                     <li style="color: #000000;">Company: ${newMail.company}</li>
+                     <li style="color: #000000;">Country: ${newMail.country}</li>
+                     <li style="color: #000000;">Goals: ${newMail.goals}</li>
+                     <li style="color: #000000;">Date: ${newMail.date}</li>
+                     <li style="color: #000000;">IP: ${newMail.ip}</li>
+                  </ul>
+               `,
+            };
+
+            try {
+               await transporter.sendMail(mailOptions);
+               res.status(201).json({ message: "Mail sent successfully" });
+            } catch (error) {
+               res.status(500).json({ error: "Failed to send mail" });
+            }
          }
       });
    }
