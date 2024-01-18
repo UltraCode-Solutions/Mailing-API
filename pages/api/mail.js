@@ -71,7 +71,7 @@ export default async function handler(req, res) {
                   mimetype = "docx";
                } else if (mimetype == "application/pdf") {
                   mimetype = "pdf";
-               } else if (mimetype == "application/msword") {
+               } else{
                   mimetype = "doc";
                }
 
