@@ -47,7 +47,8 @@ export default async function handler(req, res) {
             ip,
             date,
          };
-
+         console.log(subject);
+         console.log(newMail.subject);
          // Send mail using Nodemailer
          const transporter = nodemailer.createTransport({
             service: "gmail",
